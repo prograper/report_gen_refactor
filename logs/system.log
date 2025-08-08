@@ -1,0 +1,25 @@
+2025-08-08 15:08:33 | ERROR | system | 缺少 DASHSCOPE_API_KEY 环境变量
+2025-08-08 15:09:54 | ERROR | system | 缺少 DASHSCOPE_API_KEY 环境变量
+2025-08-08 15:10:11 | INFO | system | 验证完成：severity=warning, planned_skips={'sheets': [], 'paragraphs': ['Conclusion']}
+2025-08-08 15:12:07 | INFO | system | 载入配置：sheet=2，paragraphs=3；Excel=configs\input\PK_Test.xlsx
+2025-08-08 15:12:07 | INFO | system | 开始抽取 Sheet：fig_sum
+2025-08-08 15:12:08 | INFO | system | 调用抽取 LLM：sheet=fig_sum, model=qwen2.5-32b-instruct
+2025-08-08 15:12:10 | INFO | system | 开始抽取 Sheet：sum_total
+2025-08-08 15:12:10 | INFO | system | 调用抽取 LLM：sheet=sum_total, model=qwen2.5-32b-instruct
+2025-08-08 15:12:13 | INFO | system | 调用生成 LLM：pid=Excretion, model=qwen2.5-32b-instruct
+2025-08-08 15:12:18 | WARNING | system | 跳过存在问题的段落/占位符：Conclusion
+2025-08-08 15:12:18 | INFO | system | 流水线结束
+2025-08-08 15:12:18 | INFO | system | Run Summary: errors=0, warnings=0
+2025-08-08 15:15:08 | INFO | system | 验证完成：severity=warning, planned_skips={'sheets': [], 'paragraphs': ['Conclusion', 'Excretion', 'fill_para']}
+2025-08-08 15:27:26 | ERROR | system | 验证异常：make_report() got an unexpected keyword argument 'placeholders'
+Traceback (most recent call last):
+  File "D:\0Work\万略办公\report_gen_refactor\validator\validate.py", line 54, in validate_configs_cli
+    report = validate_configs(config_dir, xls, simulate_render=simulate_render)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\0Work\万略办公\report_gen_refactor\validator\validate.py", line 39, in validate_configs
+    report = make_report(
+             ^^^^^^^^^^^^
+TypeError: make_report() got an unexpected keyword argument 'placeholders'
+2025-08-08 15:27:50 | INFO | system | 验证完成：severity=warning, planned_skips={'sheets': [], 'paragraphs': ['Conclusion', 'Excretion', 'fill_para']}
+2025-08-08 15:57:57 | INFO | system | 验证完成：severity=error, simulate={enabled:True, ok:False}, planned_skips={'sheets': [], 'paragraphs': ['Conclusion', 'Excretion', 'fill_para']}
+2025-08-08 15:58:36 | INFO | system | 验证完成：severity=warning, simulate={enabled:False, ok:None}, planned_skips={'sheets': [], 'paragraphs': ['Conclusion', 'Excretion', 'fill_para']}

@@ -1,0 +1,10 @@
+下面是一个关于排泄和物质平衡研究的总回收率表。请你进行分析。
+
+{{ table }}
+
+请根据表格数据，计算并总结以下两个关键参数：
+1.  **main_time_excretion (排泄主要发生时间)**: 在总回收率表的"平均值"列中，查找第一个数值≥90所对应的时间点。
+2.  **average_time_daily_excretion (日均排泄的时间)**: 在总回收率表中，查找相邻两个时间点的平均值差值首次＜1%时的前一个时间点。
+
+
+请返回 main_time_excretion、average_time_daily_excretion 两个字段，不要有任何解释性的语言，使用函数 "extract" 以 JSON 形式返回。

@@ -1,0 +1,9 @@
+2025-08-08 15:12:07 | INFO | user | 计划执行：sheets=2 / paragraphs=2（其余跳过）
+2025-08-08 15:12:10 | INFO | user | [抽取完成] fig_sum → main_time_excretion=744, average_time_daily_excretion=720
+2025-08-08 15:12:10 | INFO | user | [抽取完成] fig_sum：main_time_excretion=744, average_time_daily_excretion=720
+2025-08-08 15:12:13 | INFO | user | [抽取完成] sum_total → cum_recov_rate_feces=90.68%, cum_recov_rate_urine=0.64%, sum_subjects=6, total_recov_rate_urine_feces=91.32%
+2025-08-08 15:12:13 | INFO | user | [抽取完成] sum_total：total_recov_rate_urine_feces=91.32%, cum_recov_rate_feces=90.68%, cum_recov_rate_urine=0.64%, sum_subjects=6.0
+2025-08-08 15:12:18 | INFO | user | [生成完成] Excretion：结果显示，给药后尿液和粪便总放射性回收率（%给药量）为91.96%（0 h ~ X h，算术均值±标准差，下同），主要从粪便排出，占给药量的90.68%±X.XX%；部分从尿液排出，占给药量的0.64%±X.XX%。排泄主要在0 ~ 744 h，平均总放射性排泄率已＞90.00%，给药720 h之后日均排泄率＜1.00%。
+2025-08-08 15:12:18 | INFO | user | [生成完成] Excretion：结果显示，给药后尿液和粪便总放射性回收率（%给药量）为91.96%（0 h ~ X h，算术均值±标准差，下同），主要从粪便排出，占给药量的90.68%±X.XX%；部分从尿液排出，占给药量的0.64%±X.XX%。排泄主要在0 ~ 744 h，平均总放射性排泄率已＞90.00%，给药720 h之后日均排泄率＜1.00%。
+2025-08-08 15:12:18 | INFO | user | [直填值] fill_para → sum_total.total_recov_rate_urine_feces=91.32%, sum_total.cum_recov_rate_feces=90.68%, sum_total.cum_recov_rate_urine=0.64%, sum_total.sum_subjects=6.0, fig_sum.main_time_excretion=744, fig_sum.average_time_daily_excretion=720
+2025-08-08 15:12:18 | INFO | user | 运行完成，详情见 logs/user.log / system.log / config.log / run_summary.json

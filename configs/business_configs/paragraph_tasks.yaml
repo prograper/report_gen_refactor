@@ -1,0 +1,24 @@
+# 定义要生成的段落
+Excretion:
+  mode: generate
+  keys: [sum_total.total_recov_rate_urine_feces, sum_total.cum_recov_rate_feces, sum_total.cum_recov_rate_urine, fig_sum.main_time_excretion, fig_sum.average_time_daily_excretion]
+  prompt: generate/gen_intro.txt
+
+Conclusion:
+  mode: generate
+  keys: [sum_total.total_recov_rate_urine_feces, sum_total.cum_recov_rate_feces, sum_total.cum_recov_rate_urine, sum_total.sum_subjects, fig_sum.main_time_excretion, fig_sum.average_time_daily_excretion]
+  prompt: generate/gen_method.txt
+
+fill_para:
+  mode: fill
+  keys: 
+    - sum_total.total_recov_rate_urine_feces
+    - sum_total.cum_recov_rate_feces
+    - sum_total.cum_recov_rate_urine
+    - sum_total.sum_subjects
+    - fig_sum.main_time_excretion
+    - fig_sum.average_time_daily_excretion
+
+# StabilityParagraph:
+#   keys: [age, weight]
+#   prompt: prompts/gen_stability.txt

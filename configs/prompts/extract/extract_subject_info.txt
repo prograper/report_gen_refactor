@@ -1,0 +1,12 @@
+下面是一个关于排泄和物质平衡研究的回收率表。请你进行分析。
+
+{{ table }}
+
+请根据表格数据，计算并总结以下两个关键参数：
+1.  **total_recov_rate_urine_feces (尿液粪便总回收率)**: 对每位受试者的尿液累计值与粪便累计值相加，再取所有受试者的平均值（或直接相加两项平均值）。
+2.  **cum_recov_rate_feces (粪便累计回收率)**: 将各时点粪便样品的 “% 给药量” 相加后取所有受试者的平均值。
+3.  **cum_recov_rate_urine（尿液累计回收率）**:将每位受试者各时点尿液样品的 “% 给药量” 相加后取所有受试者的平均值。
+4.  **sum_subjects（受试者例数）**：受试者的总人数。
+
+
+请返回 total_recov_rate_urine_feces、cum_recov_rate_feces、cum_recov_rate_urine、sum_subjects 四个字段，不要有任何解释性的语言，使用函数 "extract" 以 JSON 形式返回。

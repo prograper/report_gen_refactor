@@ -1,0 +1,93 @@
+{
+  "severity": "warning",
+  "excel": {
+    "sheets": [
+      "fig_sum",
+      "sum_total"
+    ]
+  },
+  "sheets": [
+    "fig_sum",
+    "sum_total"
+  ],
+  "paragraphs": {
+    "all": [
+      "Excretion",
+      "Conclusion",
+      "fill_para"
+    ]
+  },
+  "findings": [
+    {
+      "level": "warning",
+      "where": "KEY",
+      "msg": "Excretion 的字段不在 fig_sum.keys 声明中：fig_sum.main_time_excretion",
+      "tag": [
+        "para",
+        "Excretion"
+      ]
+    },
+    {
+      "level": "warning",
+      "where": "KEY",
+      "msg": "Conclusion 的字段不在 fig_sum.keys 声明中：fig_sum.main_time_excretion",
+      "tag": [
+        "para",
+        "Conclusion"
+      ]
+    },
+    {
+      "level": "warning",
+      "where": "KEY",
+      "msg": "fill_para 的字段不在 fig_sum.keys 声明中：fig_sum.main_time_excretion",
+      "tag": [
+        "para",
+        "fill_para"
+      ]
+    },
+    {
+      "level": "warning",
+      "where": "TEMPLATE",
+      "msg": "模板变量字段未在 keys 声明：`fig_sum.main_time_excretion`",
+      "tag": [
+        "tpl-var",
+        "fig_sum.main_time_excretion"
+      ]
+    }
+  ],
+  "planned_skips": {
+    "sheets": [],
+    "paragraphs": [
+      "Conclusion",
+      "Excretion",
+      "fill_para"
+    ]
+  },
+  "simulate_render": false,
+  "simulate": {
+    "enabled": false,
+    "ok": null,
+    "error": null
+  },
+  "placeholders": {
+    "variables": [
+      "fig_sum.average_time_daily_excretion",
+      "fig_sum.main_time_excretion",
+      "sum_total.cum_recov_rate_urine",
+      "sum_total.total_recov_rate_urine_feces"
+    ],
+    "paragraphs": [
+      "Conclusion",
+      "Excretion"
+    ],
+    "others": [],
+    "raw": [
+      "Excretion",
+      "Conclusion",
+      "sum_total.total_recov_rate_urine_feces",
+      "sum_total.cum_recov_rate_urine",
+      "fig_sum.main_time_excretion",
+      "fig_sum.average_time_daily_excretion"
+    ]
+  }
+}
