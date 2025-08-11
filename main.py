@@ -20,7 +20,7 @@ def parse_args():
     ap_val.add_argument("--no-render", action="store_true", help="不做模板模拟渲染")
     ap_val.add_argument("--strict", action="store_true", help="严格模式：存在 error 则退出码为1")
 
-    # run 子命令（兼容你之前的参数）
+    # run 子命令（兼容之前的参数）
     ap_run = sub.add_parser("run", help="执行流水线：抽取→生成/直填→渲染docx")
     ap_run.add_argument("-c", "--config", default="configs", help="配置目录")
     ap_run.add_argument("-n", "--name", default="生成报告文件", help="输出报告名称（不含扩展名）")

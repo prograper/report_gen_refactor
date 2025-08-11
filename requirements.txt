@@ -5,3 +5,5 @@ python-docx
 openai>=1.14
 openpyxl
 docxtpl
+uvicorn
+fastapi
