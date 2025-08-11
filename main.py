@@ -3,7 +3,7 @@ from __future__ import annotations
 import os, sys, argparse, logging
 from pathlib import Path
 
-from core.logging_setup import setup_logging  # 你已有 logging_setup.py；若路径不同请调整
+from core.logging_setup import setup_logging
 from validator.validate import validate_configs_cli
 from orchestrator import run_pipeline
 
@@ -19,11 +19,13 @@ def parse_args():
     ap_val.add_argument("-i", "--input",  default=None, help="Excel 文件路径（默认读取 config/input 下的第一个）")
     ap_val.add_argument("--no-render", action="store_true", help="不做模板模拟渲染")
     ap_val.add_argument("--strict", action="store_true", help="严格模式：存在 error 则退出码为1")
+    ap_val.add_argument("--logs", default=None, help="日志输出目录（默认 <config_dir>/../logs）")
 
     # run 子命令（兼容之前的参数）
     ap_run = sub.add_parser("run", help="执行流水线：抽取→生成/直填→渲染docx")
     ap_run.add_argument("-c", "--config", default="configs", help="配置目录")
     ap_run.add_argument("-n", "--name", default="生成报告文件", help="输出报告名称（不含扩展名）")
+    ap_run.add_argument("--logs", default=None, help="日志输出目录（默认 <config_dir>/../logs）")
 
     # 向后兼容：未给子命令时默认 run
     ap.add_argument("-C", "--compat-config", dest="compat_config", default=None, help=argparse.SUPPRESS)
@@ -32,28 +34,46 @@ def parse_args():
 
 def main():
     args = parse_args()
-    setup_logging(ROOT)
 
     if args.cmd == "validate":
-        exit_code = validate_configs_cli(
-            config_dir=Path(args.config),
-            excel_path=Path(args.input) if args.input else None,
-            simulate_render=not args.no_render,
-            strict=args.strict,
-            root=ROOT,
-        )
-        sys.exit(exit_code)
+        config_dir = Path(args.config).resolve()
+        # 默认日志目录 = <config_dir>/../logs
+        default_logs = (config_dir.parent / "logs").resolve()
+        logs_dir = Path(args.logs).resolve() if args.logs else default_logs
 
-    # 兼容旧调用：python main.py -c ... -n ...
-    if args.compat_config or args.compat_name:
-        config_dir = args.compat_config or "configs"
-        name       = args.compat_name   or "生成报告文件"
-        run_pipeline(Path(config_dir), name, root=ROOT)
-        return
+        # 初始化日志到指定目录（验证阶段也记 log）
+        setup_logging(logs_dir)
+
+        # root：用于报告写入的“项目根”，惯例为 logs 的父目录
+        root = logs_dir.parent
+
+        # 调用验证 CLI（透传 logs_dir）
+        from validator.validate import validate_configs_cli
+        code = validate_configs_cli(
+            config_dir=config_dir,
+            excel_path=Path(args.input).resolve() if args.input else None,
+            simulate_render=(not args.no_render),
+            strict=args.strict,
+            root=root,
+            logs_dir=logs_dir,
+        )
+        sys.exit(code)
 
     # 正常 run 子命令
     if args.cmd == "run" or args.cmd is None:
-        run_pipeline(Path(args.config), args.name, root=ROOT)
+        config_dir = Path(getattr(args, "config", "configs")).resolve()
+        default_logs = (config_dir.parent / "logs").resolve()
+        logs_dir = Path(getattr(args, "logs", None)).resolve() if getattr(args, "logs", None) else default_logs
+
+        # 初始化日志
+        setup_logging(logs_dir)
+
+        # root = 日志目录的父级
+        root = logs_dir.parent
+
+        # 跑流水线（确保内部使用 root 来定位日志）
+        from orchestrator import run_pipeline
+        run_pipeline(config_dir=config_dir, report_name=getattr(args, "name", "生成报告文件"), root=root, logs_dir=logs_dir)
     else:
         logging.getLogger("system").error(f"未知命令：{args.cmd}")
         sys.exit(2)

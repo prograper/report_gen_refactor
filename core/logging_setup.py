@@ -1,55 +1,63 @@
 # logging_setup.py
 from __future__ import annotations
+from pathlib import Path
 import logging
 from logging.handlers import TimedRotatingFileHandler
-from pathlib import Path
+import sys
 
-def setup_logging(root: Path):
+# 单例开关，避免重复添加 handler
+_INITIALIZED = False
+_CUR_DIR: Path | None = None
+
+def setup_logging(logs_dir: str | Path | None = None) -> Path:
     """
-    初始化三种日志：
-      - user   : 用户可读的业务进度（INFO）
-      - system : 系统运行状态（INFO+到控制台）
-      - config : 配置/提示词/Schema 等调试信息（DEBUG）
-    日志保存到 <root>/logs/*.log
+    初始化分层日志。支持显式指定日志目录。
+    - logs_dir=None：默认使用 项目根下的 logs（推断为 main.py 所在目录的上一级 /logs）
+    - 返回最终的日志目录 Path
     """
-    logs_dir = root / "logs"
-    logs_dir.mkdir(parents=True, exist_ok=True)
+    global _INITIALIZED, _CUR_DIR
+    if _INITIALIZED and _CUR_DIR and logs_dir is None:
+        return _CUR_DIR
 
-    fmt = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
+    # 解析日志目录
+    if logs_dir is not None:
+        logs_path = Path(logs_dir).expanduser().resolve()
+    else:
+        # 默认：以启动脚本所在目录的父级为 root，使用 <root>/logs
+        try:
+            root = Path(sys.argv[0]).resolve().parent
+            # 假设结构是 <project_root>/main.py -> root 就是 project_root
+            logs_path = (root / "logs").resolve()
+        except Exception:
+            logs_path = Path("./logs").resolve()
 
-    def make_logger(name: str, filename: str, level: int, to_console: bool=False):
+    logs_path.mkdir(parents=True, exist_ok=True)
+
+    # 清理旧 handler（防止重复初始化）
+    for name in ("user", "system", "config"):
         logger = logging.getLogger(name)
-        logger.handlers.clear()
+        logger.handlers = []
+
+    # 控制台（只挂在 system 上，便于开发时看）
+    console = logging.StreamHandler(sys.stdout)
+    console.setLevel(logging.INFO)
+    console.setFormatter(logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s"))
+
+    def _mk_logger(name: str, filename: str, level: int):
+        logger = logging.getLogger(name)
         logger.setLevel(level)
-
-        fh = TimedRotatingFileHandler(
-            logs_dir / filename,
-            when="midnight",
-            backupCount=14,
-            encoding="utf-8"
-        )
-        fh.setFormatter(fmt)
+        fh = TimedRotatingFileHandler(logs_path / filename, when="midnight", backupCount=14, encoding="utf-8")
+        fh.setLevel(level)
+        fh.setFormatter(logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s"))
         logger.addHandler(fh)
-
-        if to_console:
-            ch = logging.StreamHandler()
-            ch.setFormatter(fmt)
-            ch.setLevel(level)
-            logger.addHandler(ch)
-
-        logger.propagate = False
+        if name == "system":
+            logger.addHandler(console)
         return logger
 
-    # 三类日志
-    make_logger("user",   "user.log",   logging.INFO)
-    make_logger("system", "system.log", logging.INFO, to_console=True)
-    make_logger("config", "config.log", logging.DEBUG)
+    _mk_logger("user",   "user.log",   logging.INFO)
+    _mk_logger("system", "system.log", logging.INFO)
+    _mk_logger("config", "config.log", logging.DEBUG)
 
-    return {
-        "user":   logging.getLogger("user"),
-        "system": logging.getLogger("system"),
-        "config": logging.getLogger("config"),
-    }
+    _INITIALIZED = True
+    _CUR_DIR = logs_path
+    return logs_path

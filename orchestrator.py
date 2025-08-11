@@ -18,8 +18,8 @@ SYS_LOG  = logging.getLogger("system")
 USER_LOG = logging.getLogger("user")
 CFG_LOG  = logging.getLogger("config")
 
-def run_pipeline(config_dir: Path, report_name: str, root: Path):
-    setup_logging(root)
+def run_pipeline(config_dir: Path, report_name: str, root: Path, logs_dir: Path | None = None):
+    setup_logging(logs_dir or (config_dir.parent / "logs"))
     ec = ErrorCollector()
 
     # 1) 加载配置 & Excel

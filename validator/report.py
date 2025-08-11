@@ -34,12 +34,22 @@ def make_report(
         "placeholders": placeholders or {"variables": [], "paragraphs": [], "others": [], "raw": []},
     }
 
-def write_report_files(report: dict, root: Path):
-    logs = root / "logs"
-    logs.mkdir(exist_ok=True)
-    (logs / "validator_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+def write_report_files(report: dict, root: Path, logs_dir: Path | None = None):
+    """
+    写验证器报告：
+    - 默认写到 <root>/logs/
+    - 若提供 logs_dir，则写到 logs_dir（绝对/相对均可）
+    """
+    if logs_dir is None:
+        logs = root / "logs"
+    else:
+        logs = Path(logs_dir).expanduser().resolve()
+    logs.mkdir(exist_ok=True, parents=True)
 
-    # -------- Markdown 友好输出 --------
+    (logs / "validator_report.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
     lines = []
     lines.append("# Validator Report")
     lines.append(f"- severity: **{report['severity']}**")
@@ -50,7 +60,6 @@ def write_report_files(report: dict, root: Path):
     lines.append(f"- simulate_render: enabled={sim.get('enabled')}, ok={sim.get('ok')}, error={sim.get('error')}")
     lines.append("")
 
-    # 占位符汇总（干净）
     ph = report.get("placeholders", {})
     if ph:
         lines.append("## Template Placeholders (clean)")
@@ -68,7 +77,6 @@ def write_report_files(report: dict, root: Path):
                 lines.append(f"  - `{o}`")
         lines.append("")
 
-    # 发现项
     lines.append("## Findings")
     if not report.get("findings"):
         lines.append("- (none)")
