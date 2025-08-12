@@ -131,7 +131,7 @@ def validate_endpoint(req: ValidateRequest):
     # 验证（不写 docx、不调 LLM）
     report = validate_configs(config_dir, xls, simulate_render=req.simulate_render)
     # 写报告到 logs/
-    write_report_files(report, project_root)
+    write_report_files(report, project_root, project_root / "logs")
 
     return {
         "project": str(project_root),
